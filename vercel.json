@@ -1,13 +1,14 @@
 {
   "rewrites": [
     {
+      "source": "/hellofont/(.*)",
+      "destination": "/hellofont/proxy"
+    },
+    {
       "source": "/api/(.*)",
       "destination": "/api/proxy"
     },
     {
-      "source": "/hellofont/(.*)",
-      "destination": "/hellofont/proxy"
-    },{
       "source": "/webfontmanagement/(.*)",
       "destination": "/webfontmanagement/proxy"
     }
