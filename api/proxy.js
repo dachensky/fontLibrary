@@ -1,50 +1,44 @@
-const {createProxyMiddleware} = require('http-proxy-middleware')
-const express = require('express')
+// 该服务为 vercel serve跨域处理
+const {
+    createProxyMiddleware
+} = require('http-proxy-middleware')
 
-const app = express();
-
-//设置跨域访问
-app.all("*", function (req, res, next) {
-    //设置允许跨域的域名，*代表允许任意域名跨域
-    res.header("Access-Control-Allow-Origin", "*");
-    //允许的header类型
-    res.header("Access-Control-Allow-Headers", "content-type");
-
-    if (req.method.toLowerCase() == "options") res.send(200);
-    //让options尝试请求快速结束
-    else next();
-});
-
-
-module.exports = function (app){
-    app.use(
-        "/api",
+module.exports = (req, res) => {
+    if (req.url.startsWith('/api')) {
+        // 创建代理对象并转发请求
         createProxyMiddleware({
-            target: "https://back3.hellofont.cn",
+            target:'https://back3.hellofont.cn',
             changeOrigin: true,
             pathRewrite: {
-                "^/api": "", // rewrite path
-            },
-        })
-    );
-    app.use(
-        "/hellofont",
+                // 通过路径重写，去除请求路径中的 `/backend`
+                // 例如 /backend/user/login 将被转发到 http://backend-api.com/user/login
+                '^/api': '/'
+            }
+        })(req, res)
+    }
+
+    if (req.url.startsWith('/hellofont')){
         createProxyMiddleware({
-            target: "https://www.hellofont.cn/",
+            target:'https://www.hellofont.cn/',
             changeOrigin: true,
             pathRewrite: {
-                "^/hellofont": "", // rewrite path
-            },
-        })
-    );
-    app.use(
-        "/webfontmanagement",
+                // 通过路径重写，去除请求路径中的 `/backend`
+                // 例如 /backend/user/login 将被转发到 http://backend-api.com/user/login
+                '^/hellofont': '/'
+            }
+        })(req, res)
+    }
+
+    if (req.url.startsWith('/webfontmanagement')){
         createProxyMiddleware({
-            target: "https://www.hellowebfont.com/",
+            target:'https://www.hellowebfont.com/',
             changeOrigin: true,
             pathRewrite: {
-                "^/webfontmanagement": "", // rewrite path
-            },
-        })
-    );
+                // 通过路径重写，去除请求路径中的 `/backend`
+                // 例如 /backend/user/login 将被转发到 http://backend-api.com/user/login
+                '^/webfontmanagement': '/'
+            }
+        })(req, res)
+    }
+
 }
