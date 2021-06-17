@@ -8,10 +8,9 @@ module.exports = (req, res) => {
         // 创建代理对象并转发请求
         createProxyMiddleware({
             target:'https://back3.hellofont.cn',
+            ws: true,
             changeOrigin: true,
             pathRewrite: {
-                // 通过路径重写，去除请求路径中的 `/backend`
-                // 例如 /backend/user/login 将被转发到 http://backend-api.com/user/login
                 '^/api': '/'
             },
             headers: {
@@ -19,15 +18,12 @@ module.exports = (req, res) => {
                 origin: "https://www.hellofont.cn/",
             },
         })(req, res)
-    }
-
-    if (req.url.startsWith('/hellofont')){
+    }else if (req.url.startsWith('/hellofont')){
         createProxyMiddleware({
             target:'https://www.hellofont.cn/',
+            ws: true,
             changeOrigin: true,
             pathRewrite: {
-                // 通过路径重写，去除请求路径中的 `/backend`
-                // 例如 /backend/user/login 将被转发到 http://backend-api.com/user/login
                 '^/hellofont': '/'
             },
             headers: {
@@ -35,15 +31,12 @@ module.exports = (req, res) => {
                 origin: "https://www.hellofont.cn/font-list",
             },
         })(req, res)
-    }
-
-    if (req.url.startsWith('/webfontmanagement')){
+    }else if(req.url.startsWith('/webfontmanagement')){
         createProxyMiddleware({
             target:'https://www.hellowebfont.com/',
+            ws: true, //代理websockets
             changeOrigin: true,
             pathRewrite: {
-                // 通过路径重写，去除请求路径中的 `/backend`
-                // 例如 /backend/user/login 将被转发到 http://backend-api.com/user/login
                 '^/webfontmanagement': '/'
             },
             headers: {
