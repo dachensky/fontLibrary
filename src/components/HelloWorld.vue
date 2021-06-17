@@ -239,7 +239,7 @@ export default {
         formData.append("fonts[]", item.id);
       });
       this.$axios({
-        method: "post",
+        method: "get",
         url: "/hellofont/api/font/poem/list",
         data: formData,
       }).then((res) => {
